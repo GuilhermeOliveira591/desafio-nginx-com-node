@@ -11,9 +11,23 @@ const config = {
 const mysql = require('mysql');
 const connection = mysql.createConnection(config);
 
-const sql = `INSERT INTO people(name) values('Guilherme')`;
-connection.query(sql);
-connection.end();
+async function insertPeopleIntoDatabase(name, connection) {
+    const sql = `INSERT INTO names(name) VALUES(?)`;
+    await connection.query(sql, [name]);
+    connection.end();
+}
+
+async function getAllPeopleFromDatabase(connection) {
+    const sql = 'SELECT name FROM names';
+    const rows = await connection.query(sql);
+    connection.end();
+ 
+    return rows;
+}
+
+
+
+
 
 app.get('/', (req, res) => {
     res.send('<h1> Full Cycle Rocks! </h1>');
